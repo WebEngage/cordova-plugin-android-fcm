@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-android-fcm",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Cordova plugin for Android FCM service.",
   "cordova": {
     "id": "cordova-plugin-android-fcm",
@@ -9,8 +9,8 @@
     ]
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/WebEngage/cordova-plugin-android-fcm/tree/feature/capSupport.git"
+    "type": "git",
+    "url": "https://github.com/WebEngage/cordova-plugin-android-fcm/tree/feature/capSupport.git"
   },
   "keywords": [
     "ecosystem:cordova",

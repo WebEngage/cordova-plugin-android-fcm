@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<plugin id="cordova-plugin-android-fcm" version="1.0.1"
+<plugin id="cordova-plugin-android-fcm" version="1.1.0"
     xmlns="http://apache.org/cordova/ns/plugins/1.0" 
     xmlns:android="http://schemas.android.com/apk/res/android">
     <name>AndroidFcmPlugin</name>
@@ -16,6 +16,9 @@
             <uses-permission android:name="android.permission.INTERNET" />
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <meta-data
+            android:name="com.webengage.child.cordova_fcm"
+            android:value="cordova_fcm:${we_cordova_fcm_version}" />
             <service android:name="com.androidfcm.cordova.CustomFirebaseMessagingService" android:exported="true" >
                 <intent-filter>
                     <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -27,6 +30,7 @@
         <source-file src="src/android/CustomFirebaseMessagingService.java" target-dir="src/com/androidfcm/cordova/" />
 
         <framework src="src/android/AndroidFcmPlugin.gradle" custom="true" type="gradleReference"/>
+        <resource-file src="src/android/cordova_fcm_version.properties" target="cordova_fcm_version.properties" />
 
         <hook src="hooks/android_after_prepare.js" type="after_prepare" />
     </platform>
