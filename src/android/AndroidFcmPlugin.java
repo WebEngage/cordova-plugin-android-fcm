@@ -26,6 +26,9 @@ public class AndroidFcmPlugin extends CordovaPlugin {
         } else if ("getToken".equals(action)) {
             this.getToken(callbackContext);
             return true;
+        } else if (action.equals("ready")) {
+            callbackContext.success();
+            return true;
         }
         return false;
     }

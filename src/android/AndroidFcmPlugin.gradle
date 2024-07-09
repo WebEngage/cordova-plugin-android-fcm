@@ -23,8 +23,6 @@ android {
         minSdkVersion project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 21
         targetSdkVersion project.hasProperty('targetSdkVersion') ? rootProject.ext.targetSdkVersion : 33
         manifestPlaceholders.we_cordova_fcm_version = readVersion()
-        versionCode 2
-        versionName "1.1.0"
     }
     lintOptions {
         abortOnError false
@@ -49,10 +47,9 @@ String readVersion() {
 }
 
 dependencies {
-	implementation 'com.google.firebase:firebase-messaging:+'
+    // implementation 'com.google.firebase:firebase-messaging:20.0.0'
 }
 
-//apply plugin: 'com.google.gms.google-services'
 ext.postBuildExtras = {
     apply plugin: com.google.gms.googleservices.GoogleServicesPlugin
 }
