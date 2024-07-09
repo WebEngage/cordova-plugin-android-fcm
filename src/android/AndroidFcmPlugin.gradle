@@ -47,7 +47,7 @@ String readVersion() {
 }
 
 dependencies {
-    // implementation 'com.google.firebase:firebase-messaging:20.0.0'
+    // Add Firebase dependency from build-extras.gradle as per the docs
 }
 
 ext.postBuildExtras = {

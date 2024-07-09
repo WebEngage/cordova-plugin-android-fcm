@@ -21,9 +21,6 @@ AndroidFCMPlugin.prototype.getToken = function (success, error) {
 var androidFCMPlugin = new AndroidFCMPlugin();
 
 if (cordova.platformId === "android") {
-    console.log("AndroidFCMPlugin.js is created");
-
-    console.log("fcm: action in calling from js")
     exec(function() {
         console.log("AndroidFCMPlugin Ready OK")
     }, function() {
