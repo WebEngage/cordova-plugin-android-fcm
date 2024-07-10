@@ -1,9 +1,9 @@
 {
-  "name": "cordova-plugin-android-fcm",
+  "name": "we-cordova-android-fcm",
   "version": "1.0.0",
   "description": "Cordova plugin for Android FCM service.",
   "cordova": {
-    "id": "cordova-plugin-android-fcm",
+    "id": "we-cordova-android-fcm",
     "platforms": [
       "android"
     ]

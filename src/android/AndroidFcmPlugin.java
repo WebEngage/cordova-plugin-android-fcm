@@ -16,7 +16,7 @@ import com.webengage.sdk.android.WebEngage;
  * This class echoes a string called from JavaScript.
  */
 public class AndroidFcmPlugin extends CordovaPlugin {
-    private static final String TAG = "cordova-plugin-android-fcm";
+    private static final String TAG = "we-cordova-android-fcm";
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
