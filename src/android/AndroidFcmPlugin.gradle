@@ -1,26 +1,55 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.0'
-        classpath 'com.google.gms:google-services:4.3.8'
+        classpath 'com.android.tools.build:gradle:7.2.2'
+        classpath 'com.google.gms:google-services:4.3.12'
     }
 }
 
 allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
-dependencies {
-	implementation 'com.google.firebase:firebase-messaging:+'
+android {
+    compileSdkVersion project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : 33
+
+    defaultConfig {
+        minSdkVersion project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 21
+        targetSdkVersion project.hasProperty('targetSdkVersion') ? rootProject.ext.targetSdkVersion : 33
+        manifestPlaceholders.we_cordova_fcm_version = readVersion()
+    }
+    lintOptions {
+        abortOnError false
+    }
 }
 
-//apply plugin: 'com.google.gms.google-services'
+String readVersion() {
+    def version = new Properties()
+    def stream
+    try {
+        stream = new FileInputStream(new File(projectDir, './src/main/cordova_fcm_version.properties'))
+        version.load(stream)
+    } catch (FileNotFoundException ignore) {
+    } finally {
+        if (stream != null) stream.close()
+    }
+    // safety defaults in case file is missing
+    if(!version['major']) version['major'] = "1"
+    if(!version['minor']) version['minor'] = "0"
+    if(!version['patch']) version['patch'] = "0"
+    return "${version['major']}.${version['minor']}.${version['patch']}"
+}
+
+dependencies {
+    // Add Firebase dependency from build-extras.gradle as per the docs
+}
+
 ext.postBuildExtras = {
     apply plugin: com.google.gms.googleservices.GoogleServicesPlugin
 }
