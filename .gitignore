@@ -1,0 +1,8 @@
+node_modules/
+package-lock.json
+*.tgz
+.DS_Store
+
+# Local only: docs-site copy and maintainer notes
+docs/
+DEVELOPER_NOTES.md

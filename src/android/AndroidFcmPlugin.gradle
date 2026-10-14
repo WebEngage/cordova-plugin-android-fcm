@@ -1,32 +1,26 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.2'
-        classpath 'com.google.gms:google-services:4.3.12'
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
+// we-cordova-android-fcm
+//
+// Applied INTO the app module by cordova-android ("PLUGIN GRADLE EXTENSIONS" in app/build.gradle),
+// before the host's own android {} block. It only declares what the plugin owns and never touches
+// host settings (SDK levels, lint, repositories, AGP/Gradle).
+//
+// Google Services (processes google-services.json) is not applied here. plugin.xml sets
+// cordova-android's GradlePluginGoogleServicesEnabled preference instead, and the host adds the
+// classpath and applies the plugin. If an app sets that preference to false it must apply Google
+// Services itself, otherwise Firebase cannot start.
 
 android {
-    compileSdkVersion project.hasProperty('compileSdkVersion') ? rootProject.ext.compileSdkVersion : 33
-
     defaultConfig {
-        minSdkVersion project.hasProperty('minSdkVersion') ? rootProject.ext.minSdkVersion : 21
-        targetSdkVersion project.hasProperty('targetSdkVersion') ? rootProject.ext.targetSdkVersion : 33
+        // Value of the com.webengage.child.cordova_fcm manifest meta-data.
         manifestPlaceholders.we_cordova_fcm_version = readVersion()
     }
-    lintOptions {
-        abortOnError false
-    }
+}
+
+dependencies {
+    // com.webengage:android-sdk does not bring firebase-messaging, so declare it here.
+    // Exact version that builds on the floor host (cordova-android 12, compileSdk 33) and on
+    // newer hosts unchanged. If the app declares a newer version, Gradle uses the newer one.
+    implementation 'com.google.firebase:firebase-messaging:23.4.1'
 }
 
 String readVersion() {
@@ -39,17 +33,9 @@ String readVersion() {
     } finally {
         if (stream != null) stream.close()
     }
-    // safety defaults in case file is missing
-    if(!version['major']) version['major'] = "1"
-    if(!version['minor']) version['minor'] = "0"
-    if(!version['patch']) version['patch'] = "0"
+    // defaults in case the file is missing
+    if (!version['major']) version['major'] = "1"
+    if (!version['minor']) version['minor'] = "0"
+    if (!version['patch']) version['patch'] = "0"
     return "${version['major']}.${version['minor']}.${version['patch']}"
-}
-
-dependencies {
-    // Add Firebase dependency from build-extras.gradle as per the docs
-}
-
-ext.postBuildExtras = {
-    apply plugin: com.google.gms.googleservices.GoogleServicesPlugin
 }

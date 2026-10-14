@@ -1,17 +1,15 @@
 var exec = require("cordova/exec");
 
-function AndroidFCMPlugin() {
-  if (cordova.platformId === "android") {
-    console.log("AndroidFCMPlugin.js is created");
-  }
-}
+function AndroidFCMPlugin() {}
 
+// Sends the current FCM token to WebEngage (fire and forget).
 AndroidFCMPlugin.prototype.updateToken = function () {
   if (cordova.platformId === "android") {
     exec(null, null, "AndroidFcmPlugin", "updateToken", []);
   }
 };
 
+// Reads the current FCM token.
 AndroidFCMPlugin.prototype.getToken = function (success, error) {
   if (cordova.platformId === "android") {
     exec(success, error, "AndroidFcmPlugin", "getToken", []);
@@ -21,11 +19,11 @@ AndroidFCMPlugin.prototype.getToken = function (success, error) {
 var androidFCMPlugin = new AndroidFCMPlugin();
 
 if (cordova.platformId === "android") {
-    exec(function() {
-        console.log("AndroidFCMPlugin Ready OK")
-    }, function() {
-        console.log("AndroidFCMPlugin Ready ERROR")
-    }, "AndroidFcmPlugin", "ready", []);
-  }
+  // Handshake with the native side. Only a failure is worth logging: it means the
+  // native plugin class is not registered (broken install or build).
+  exec(null, function (err) {
+    console.error("AndroidFCMPlugin: native plugin is not available", err);
+  }, "AndroidFcmPlugin", "ready", []);
+}
 
 module.exports = androidFCMPlugin;

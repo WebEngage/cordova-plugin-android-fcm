@@ -22,7 +22,8 @@ public class CustomFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // Add your custom native code here
+        // FCM can start the app process with no JavaScript running, so the SDK is started here
+        // from the manifest values (license key). Only WebEngage payloads are handed to it.
         Map<String, String> data = remoteMessage.getData();
         if (data != null) {
             if (includesWebEngage()) {
@@ -37,7 +38,9 @@ public class CustomFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(String s) {
         super.onNewToken(s);
-        // Send token to server
+        // Send token to WebEngage. Initialising the SDK is the app's job (webengage.engage()),
+        // not this plugin's: if the SDK is not engaged yet, WebEngage.get() queues the call
+        // and runs it once the app engages.
         if (includesWebEngage()) {
             com.webengage.sdk.android.WebEngage.get().setRegistrationID(s);
         }

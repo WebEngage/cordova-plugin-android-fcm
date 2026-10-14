@@ -9,7 +9,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.webengage.sdk.android.WebEngage;
 
 /**
- * This class echoes a string called from JavaScript.
+ * Bridges FCM registration tokens to the WebEngage SDK for Cordova Android apps.
  */
 public class AndroidFcmPlugin extends CordovaPlugin {
     private static final String TAG = "we-cordova-android-fcm";
@@ -22,7 +22,7 @@ public class AndroidFcmPlugin extends CordovaPlugin {
         } else if ("getToken".equals(action)) {
             this.getToken(callbackContext);
             return true;
-        } else if (action.equals("ready")) {
+        } else if ("ready".equals(action)) {
             callbackContext.success();
             return true;
         }
@@ -30,34 +30,38 @@ public class AndroidFcmPlugin extends CordovaPlugin {
     }
 
     private void updateToken() {
-        if (CustomFirebaseMessagingService.includesWebEngage()) {
-            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-                try {
-                    String token = task.getResult();
-                    com.webengage.sdk.android.Logger.d(TAG, "Updating WebEngage FCM token: " + token);
-                    WebEngage.get().setRegistrationID(token);
-                } catch (Exception e) {
-                    com.webengage.sdk.android.Logger.e(TAG, "FCM token error", e);
-                }
-            });
+        if (!CustomFirebaseMessagingService.includesWebEngage()) {
+            return;
         }
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                com.webengage.sdk.android.Logger.e(TAG, "FCM token error", task.getException());
+                return;
+            }
+            try {
+                com.webengage.sdk.android.Logger.d(TAG, "Updating WebEngage FCM token");
+                WebEngage.get().setRegistrationID(task.getResult());
+            } catch (Exception e) {
+                com.webengage.sdk.android.Logger.e(TAG, "FCM token error", e);
+            }
+        });
     }
 
-
-    private void getToken(CallbackContext callbackContext) {
-        if (callbackContext != null) {
-            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-                try {
-                    String token = task.getResult();
-                    try {
-                        callbackContext.success(token);
-                    } catch (Throwable t) {
-                        callbackContext.error(t.getMessage());
-                    }
-                } catch (Exception e) {
-                    com.webengage.sdk.android.Logger.e(TAG, "FCM token error", e);
+    private void getToken(final CallbackContext callbackContext) {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                String token = task.getResult();
+                if (callbackContext != null) {
+                    callbackContext.success(token);
                 }
-            });
-        }
+            } else {
+                Exception e = task.getException();
+                String message = e != null ? e.getMessage() : "Unknown FCM token error";
+                com.webengage.sdk.android.Logger.e(TAG, "FCM token error", e);
+                if (callbackContext != null) {
+                    callbackContext.error(message);
+                }
+            }
+        });
     }
 }
