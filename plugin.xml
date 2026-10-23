@@ -15,6 +15,10 @@
     <js-module name="AndroidFcmPlugin" src="www/AndroidFcmPlugin.js">
         <clobbers target="androidfcm" />
     </js-module>
+
+    <js-module name="WEConstants" src="www/WEConstants.js">
+    </js-module>
+
     <platform name="android">
         <!-- Turns on cordova-android's Google Services Gradle plugin support so that
              google-services.json is processed with no change in the app's config.xml.
@@ -44,6 +48,7 @@
 
         <source-file src="src/android/AndroidFcmPlugin.java" target-dir="src/com/androidfcm/cordova/" />
         <source-file src="src/android/CustomFirebaseMessagingService.java" target-dir="src/com/androidfcm/cordova/" />
+        <source-file src="src/android/WE_FCM_CONSTANTS.java" target-dir="src/com/androidfcm/cordova/" />
 
         <framework src="src/android/AndroidFcmPlugin.gradle" custom="true" type="gradleReference"/>
         <resource-file src="src/android/cordova_fcm_version.properties" target="cordova_fcm_version.properties" />

@@ -52,6 +52,7 @@ longer owns host-app settings, so it works across AGP 7.4–8.10 / Gradle 7.6–
 
 ### Changed
 
+- `CustomFirebaseMessagingService`: an exception while handing a push or a new token to WebEngage is logged instead of terminating the app.
 - `after_prepare` hook rewritten as `module.exports = function (context)` using
   `context.opts.projectRoot`; it now creates the destination folder. Same user-facing
   behaviour (drop `google-services.json` in the project root).
