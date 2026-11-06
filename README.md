@@ -27,10 +27,8 @@ WebEngage Android SDK for Cordova apps.
 ## Installation
 
 ```sh
-cordova plugin add https://github.com/WebEngage/cordova-plugin-android-fcm.git
+cordova plugin add we-cordova-android-fcm
 ```
-
-(The old `--fetch` flag is obsolete; fetching is the default since cordova@8.)
 
 ### 1. Add `google-services.json`
 
