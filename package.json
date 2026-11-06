@@ -19,7 +19,8 @@
   "engines": {
     "cordovaDependencies": {
       "2.0.0": {
-        "cordova-android": ">=12.0.0"
+        "cordova-android": ">=12.0.0",
+        "cordova-plugin-webengage": ">=2.0.0"
       }
     }
   },
