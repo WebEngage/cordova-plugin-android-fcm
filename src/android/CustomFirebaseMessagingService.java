@@ -22,20 +22,17 @@ public class CustomFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        // FCM can start the app process with no JavaScript running, so the SDK is started here
-        // from the manifest values (license key). Only WebEngage payloads are handed to it.
+        // Only WebEngage payloads are handled. FCM can start the app process with no JavaScript
+        // running, so the SDK is started here from the manifest values (license key).
         // This runs in the app process for every push: an exception here must not terminate the app.
         try {
             Map<String, String> data = remoteMessage.getData();
-            if (data != null) {
-                if (includesWebEngage()) {
-                    com.webengage.sdk.android.WebEngage.engage(getApplicationContext());
-                    if (data.containsKey(WE_FCM_CONSTANTS.PAYLOAD_SOURCE) && WE_FCM_CONSTANTS.PAYLOAD_SOURCE_WEBENGAGE.equals(data.get(WE_FCM_CONSTANTS.PAYLOAD_SOURCE))) {
-                        com.webengage.sdk.android.WebEngage.get().receive(data);
-                    }
-                }
+            if (WE_FCM_CONSTANTS.PAYLOAD_SOURCE_WEBENGAGE.equals(data.get(WE_FCM_CONSTANTS.PAYLOAD_SOURCE))
+                    && includesWebEngage()) {
+                com.webengage.sdk.android.WebEngage.engage(getApplicationContext());
+                com.webengage.sdk.android.WebEngage.get().receive(data);
             }
-        } catch (Exception e) {
+        } catch (Exception | LinkageError e) {
             Log.e(TAG, "CustomFirebaseMessagingService: push was not handed to WebEngage", e);
         }
     }
@@ -50,7 +47,7 @@ public class CustomFirebaseMessagingService extends FirebaseMessagingService {
             if (includesWebEngage()) {
                 com.webengage.sdk.android.WebEngage.get().setRegistrationID(s);
             }
-        } catch (Exception e) {
+        } catch (Exception | LinkageError e) {
             Log.e(TAG, "CustomFirebaseMessagingService: token was not handed to WebEngage", e);
         }
     }

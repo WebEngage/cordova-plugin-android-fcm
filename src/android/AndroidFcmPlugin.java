@@ -30,7 +30,7 @@ public class AndroidFcmPlugin extends CordovaPlugin {
             this.getToken(callbackContext);
             return true;
         } else if (WE_FCM_CONSTANTS.READY.equals(action)) {
-            sendSuccessCallback(callbackContext);
+            callbackContext.success();
             return true;
         }
         return false;
@@ -57,28 +57,13 @@ public class AndroidFcmPlugin extends CordovaPlugin {
     private void getToken(final CallbackContext callbackContext) {
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                String token = task.getResult();
-                if (callbackContext != null) {
-                    callbackContext.success(token);
-                }
+                callbackContext.success(task.getResult());
             } else {
                 Exception e = task.getException();
                 String message = e != null ? e.getMessage() : WE_FCM_CONSTANTS.ERROR_UNKNOWN_TOKEN;
                 com.webengage.sdk.android.Logger.e(TAG, "AndroidFcmPlugin: FCM token error", e);
-                if (callbackContext != null) {
-                    sendErrorCallback(callbackContext, message);
-                }
+                callbackContext.error(message);
             }
         });
-    }
-
-    // Replies success to the JS caller, with no value.
-    private void sendSuccessCallback(CallbackContext callbackContext) {
-        callbackContext.success();
-    }
-
-    // Replies error to the JS caller with a message.
-    private void sendErrorCallback(CallbackContext callbackContext, String message) {
-        callbackContext.error(message);
     }
 }
