@@ -29,7 +29,10 @@ longer owns host-app settings, so it works across AGP 7.4–8.10 / Gradle 7.6–
   app change `google-services.json` is still processed. The Google Services version now
   comes from cordova-android (4.3.15 on 12.x/13.x, 4.4.2 on 14.x/15.x); set
   `GradlePluginGoogleServicesVersion` to change it. An app's own `false` overrides the
-  plugin (see the first item).
+  plugin (see the first item). The removed `lintOptions { abortOnError false }` applied to
+  the whole app module, so a release build can now stop on fatal lint errors that 1.0.0
+  hid; fix them, or set `android { lint { abortOnError false } }` in the app's own
+  `build-extras.gradle`.
 - **Upgrading needs remove + add.** `cordova plugin add` over an installed 1.0.0 does
   nothing ("already installed"). Remove inbox (if used), FCM, then core; add core, FCM,
   then inbox. The same order applies to later core upgrades: Cordova does not remove
@@ -42,8 +45,8 @@ longer owns host-app settings, so it works across AGP 7.4–8.10 / Gradle 7.6–
 - `getToken` now calls its error callback when the token cannot be read (in 1.0.0
   neither callback was called). The signature is unchanged. `updateToken()` is
   unchanged: no arguments, fire and forget.
-- `CustomFirebaseMessagingService`: an exception or linkage error while handing a push or
-  a new token to WebEngage is logged instead of terminating the app.
+- `CustomFirebaseMessagingService` and `updateToken`: an exception or linkage error while
+  handing a push or a token to WebEngage is logged instead of terminating the app.
 - `CustomFirebaseMessagingService` starts the WebEngage SDK only for WebEngage pushes (in
   1.0.0 it was started for every push). WebEngage pushes are handled as before; other
   pushes are still ignored.
@@ -53,6 +56,9 @@ longer owns host-app settings, so it works across AGP 7.4–8.10 / Gradle 7.6–
   an app that declared an older version now gets 23.4.1; that app-level line can be
   removed.
 - The FCM token is no longer written to the log by `updateToken`.
+- Log tag: all plugin log lines now use `WebEngage-Cordova-FCM` (1.0.0 used
+  `we-cordova-android-fcm` and `custom-fcm-service`). Update any logcat filter that used
+  the old tags.
 
 ### Added
 

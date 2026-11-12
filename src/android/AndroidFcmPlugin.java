@@ -48,7 +48,7 @@ public class AndroidFcmPlugin extends CordovaPlugin {
             try {
                 com.webengage.sdk.android.Logger.d(TAG, "AndroidFcmPlugin: updating WebEngage FCM token");
                 WebEngage.get().setRegistrationID(task.getResult());
-            } catch (Exception e) {
+            } catch (Exception | LinkageError e) {
                 com.webengage.sdk.android.Logger.e(TAG, "AndroidFcmPlugin: FCM token error", e);
             }
         });
